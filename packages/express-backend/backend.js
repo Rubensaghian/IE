@@ -53,7 +53,7 @@ app.get("/users", (req, res) => {
     if (name !== undefined) {
         let result = findUserByName(name);
         result = {users_list: result};
-        res.send(result)
+        return res.send(result)
     }
 
     else {
@@ -62,7 +62,7 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/users/:id", (req, res) => {
-    const id = req.params["id"];
+    const id = req.params.id;
     let result = findUserById(id);
     if (result === undefined ){
         res.status(404).send("id not found");
@@ -71,6 +71,17 @@ app.get("/users/:id", (req, res) => {
         res.send(result);
     }
 });
+
+const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+};
+
+app.post("/users", (req, res) => {
+    const userToAdd = req.body;
+    addUser(userToAdd);
+    res.status(200).send();
+})
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);

@@ -47,18 +47,36 @@ const findUserById = (id) => {
     return users["users_list"].find( (user) => user["id"] === id);
 }
 
+const addUser = (user) => {
+    users["users_list"].push(user);
+    return user;
+};
+
+const removeUserById = (id) => {
+    const userToRemove = findUserById(id);
+    if (userToRemove === undefined) {
+        return undefined;
+    }
+    users.users_list = users.users_list.filter( (user) => user.id !== id);
+
+    return userToRemove;
+};
+
+
 app.get("/users", (req, res) => {
     const name = req.query.name;
+    const job = req.query.job;
+
+    let result = users.users_list;
 
     if (name !== undefined) {
-        let result = findUserByName(name);
-        result = {users_list: result};
-        return res.send(result)
+        result = findUserByName(name);
+    }
+    if (job !== undefined) {
+        result = result.filter( (user) => user.job === job)
     }
 
-    else {
-        res.send(users);
-    }
+    res.send({users_list: result});
 });
 
 app.get("/users/:id", (req, res) => {
@@ -72,16 +90,22 @@ app.get("/users/:id", (req, res) => {
     }
 });
 
-const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
-};
-
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
     res.status(200).send();
-})
+});
+
+app.delete("/users/:id", (req, res) => {
+    const id = req.params.id;
+    let result = removeUserById(id);
+    if (result === undefined) {
+        return res.status(404).send("user not found");
+    }
+    else {
+        return res.status(200).send("user removed");
+    }
+});
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);

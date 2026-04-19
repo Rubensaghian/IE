@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Table from "./Table.jsx";
 import Form from "./Form.jsx";
 
@@ -14,11 +14,10 @@ function MyApp() {
 
   function updateList(person) {
     postUser(person)
-        .then(() => setCharacters([...characters, person]))
-        .catch((error) => {
-          console.log(error);
-        });
-
+      .then(() => setCharacters([...characters, person]))
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function fetchUsers() {
@@ -32,16 +31,22 @@ function MyApp() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
+    }).then((res) => {
+      if (res.status === 201) {
+        return res.json();
+      } else {
+        throw new Error(`wrong status: ${res.status}`);
+      }
     });
   }
 
   useEffect(() => {
     fetchUsers()
-        .then((res) => res.json())
-        .then((json) => setCharacters(json["users_list"]))
-        .catch((error) => {
-          console.log(error);
-        });
+      .then((res) => res.json())
+      .then((json) => setCharacters(json["users_list"]))
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   return (

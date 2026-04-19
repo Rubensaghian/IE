@@ -64,6 +64,10 @@ const removeUserById = (id) => {
     return userToRemove;
 };
 
+const createId = () => {
+    return Date.now().toString() + Math.random().toString();
+}
+
 
 app.get("/users", (req, res) => {
     const name = req.query.name;
@@ -94,8 +98,9 @@ app.get("/users/:id", (req, res) => {
 
 app.post("/users", (req, res) => {
     const userToAdd = req.body;
+    userToAdd.id = createId();
     addUser(userToAdd);
-    res.status(200).send();
+    res.status(201).send(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {

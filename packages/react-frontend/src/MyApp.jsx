@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Table from "./Table.jsx";
 import Form from "./Form.jsx";
 
@@ -13,11 +13,26 @@ function MyApp() {
   }
 
   function updateList(person) {
-    setCharacters([...characters, person]);
+    postUser(person)
+        .then(() => setCharacters([...characters, person]))
+        .catch((error) => {
+          console.log(error);
+        });
+
   }
 
   function fetchUsers() {
     return fetch("http://localhost:8000/users");
+  }
+
+  function postUser(user) {
+    return fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
   }
 
   useEffect(() => {

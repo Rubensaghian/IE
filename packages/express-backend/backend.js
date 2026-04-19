@@ -110,7 +110,7 @@ app.delete("/users/:id", (req, res) => {
         return res.status(404).send("user not found");
     }
     else {
-        return res.status(200).send("user removed");
+        return res.status(204).send();
     }
 });
 

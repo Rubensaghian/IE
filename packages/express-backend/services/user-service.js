@@ -70,7 +70,5 @@ export default {
     addUser,
     getUsers,
     findUserById,
-    findUserByName,
-    findUserByJob,
     removeUser
 };

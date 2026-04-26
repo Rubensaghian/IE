@@ -21,17 +21,8 @@ const UserSchema = new mongoose.Schema(
     },
     {
         collection: "users_list",
-        // These two lines are CRITICAL: they tell Mongoose to include
-        // virtuals (like our new 'id') whenever data is sent to the Frontend
-        toJSON: { virtuals: true },
-        toObject: { virtuals: true }
     }
 );
-
-// This creates a virtual "id" property that mirrors the MongoDB "_id"
-UserSchema.virtual("id").get(function () {
-    return this._id.toHexString();
-});
 
 const User = mongoose.model("User", UserSchema);
 
